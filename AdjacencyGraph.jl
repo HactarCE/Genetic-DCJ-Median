@@ -1,26 +1,32 @@
 function AdjacencyGraph(G::Vector{Int})
-    # G is the input Genome without telomeres
+    # G is the input Genome with telomeres
     
     # Initialize the AdjacencyGraph as a Vector of Vectors
     AG=Vector{Vector{Int}}()
-    
-    # If the size of the genome is one, it will have only two adjacencies
-    if length(G)==1
-        push!(AG,[0,-G[1]])
-        push!(AG,[G[1],0])
-        return AG
-    end
 
     # Start with the first index and add the adjacencies to the AdjacencyGraph
-    for i in 1:length(G)
-        if i==1
-            push!(AG,[0,-G[i]])    
-        else
-            push!(AG,[G[i-1],-G[i]])
-            if i==length(G)
-                push!(AG,[G[i],0])
+    start=1
+    while(start<length(G))
+        # Look for the next telomere it will either be the start or end of a gene
+        j=findnext(==(0),G,start+1)
+        if isnothing(j)
+            j=length(G)+1
+        end
+        # if the start is not a telomere the gene is circular
+        if G[start]!=0
+            j=j-1
+        end
+        # add the adjacencies to the AdjacencyGraph
+        for i in start:j
+            if i==start
+                if G[i]!=0
+                    push!(AG,[G[j],-G[i]])
+                end
+            else
+                push!(AG,[G[i-1],-G[i]])
             end
         end
+        start=j+1
     end
     return AG
 end
