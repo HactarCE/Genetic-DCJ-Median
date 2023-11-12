@@ -1,3 +1,4 @@
+# Generate the Adjacency Graph from the Genome
 function AdjacencyGraph(G::Vector{Int})
     # G is the input Genome with telomeres
     
@@ -6,7 +7,7 @@ function AdjacencyGraph(G::Vector{Int})
 
     # Start with the first index and add the adjacencies to the AdjacencyGraph
     start=1
-    while(start<length(G))
+    while(start<=length(G))
         # Look for the next telomere it will either be the start or end of a gene
         j=findnext(==(0),G,start+1)
         if isnothing(j)
