@@ -3,18 +3,24 @@ function Genome(AG::Vector{Vector{Int}})
     G=Vector{Int}()
     while(length(AG)>0)
         # start with the first adjacency
-        if AG[1][2]==0
-            start=AG[1][2]
+        idx=findfirst(elt->0 in elt,AG)
+
+        if isnothing(idx)
+            idx=1
+        end
+        if AG[idx][2]==0
+            start=AG[idx][2]
+            temp=AG[idx][1]
         else
-            start=AG[1][1]
+            start=AG[idx][1]
+            temp=AG[idx][2]
         end
         # if the first adjacency consists of a telomere the gene is linear
         if(start==0)
             push!(G,start)
         end
-        temp=AG[1][2]
         # Delete the adjacency after it has been used
-        deleteat!(AG,1)
+        deleteat!(AG,idx)
         # Loop till the end of the gene
         while(start!=-temp)
             push!(G,-temp)

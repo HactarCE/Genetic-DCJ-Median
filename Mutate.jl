@@ -1,4 +1,6 @@
 include("DCJdistance.jl")
+include("DCJ.jl")
+# Function that generates a mutation of a genome
 function Mutate(Child::Vector{Int}, G1::Vector{Int}, G2::Vector{Int}, G3::Vector{Int})
     # Estimate the distances to each of the genomes
     d1_est=(DCJdistance(G1,G2)+DCJdistance(G1,G3)-DCJdistance(G2,G3))/2
@@ -13,12 +15,12 @@ function Mutate(Child::Vector{Int}, G1::Vector{Int}, G2::Vector{Int}, G3::Vector
     diff3=d3-d3_est
     # Mutate the median genome towards the genome it is furthest from
     if(diff1>=diff2&&diff1>=diff3)
-        mut=DCJ(Child,G1,rand(1:length(G1)))
+        mut=DCJ(Child,G1,true)
     else
         if(diff2>=diff1&&diff2>=diff3)
-            mut=DCJ(Child,G2,rand(1:length(G2)))
+            mut=DCJ(Child,G2,true)
         else
-            mut=DCJ(Child,G3,rand(1:length(G3)))
+            mut=DCJ(Child,G3,true)
         end
     end
     return mut

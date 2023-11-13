@@ -1,14 +1,16 @@
 include("AdjacencyGraph.jl")
 include("Genome.jl")
 # Function to convert the first Genome into the second using DCJ operations
-function DCJ(G1::Vector{Int}, G2::Vector{Int}, stop::Int=-1)
-    # stop is used for early stopping
+function DCJ(G1::Vector{Int}, G2::Vector{Int}, early_stop::Bool=false)
+    # early_stop is used for early stopping
     # Generate the Adjacency Graphs of both the Genomes
     AG1=AdjacencyGraph(G1)
     AG2=AdjacencyGraph(G2)
     # If stop is not specified set it to the length of the second Adjacency Graph
-    if stop==-1
+    if early_stop==false
         stop=length(AG2)
+    else
+        stop=rand(0:length(AG2))
     end
     # If stop is zero return the first genome without making any changes
     if stop==0
@@ -39,6 +41,12 @@ function DCJ(G1::Vector{Int}, G2::Vector{Int}, stop::Int=-1)
                 AG1[u][2]=q
                 AG1[v][1]=l
                 AG1[v][2]=m
+                if(p==0&&q==0)
+                    deleteat!(AG1,u)
+                end
+                if(l==0&&m==0)
+                    deleteat!(AG1,v)
+                end
             end
         # For all the adjacencies in the second genome that contain a telomere
         else
