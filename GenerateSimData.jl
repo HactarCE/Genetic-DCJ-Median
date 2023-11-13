@@ -6,7 +6,8 @@ function perform_inversion!(genome)
     if i > j
         i, j = j, i
     end
-    genome[i:j] = reverse(genome[i:j])
+    # Reverse the segment and negate each element
+    genome[i:j] = -reverse(genome[i:j])
 end
 
 function simulate_genomes(n, rates)
@@ -28,16 +29,16 @@ end
 # Testing the simulate_genomes function
 
 # Length of the genomes
-#n = 10
+n = 10
 # Inversion rates for the three genomes
-#rates = [5, 10, 15]
+rates = [5, 10, 15]
 
-#base_genome, genomes = simulate_genomes(n, rates)
+base_genome, genomes = simulate_genomes(n, rates)
 
-#println("Base genome:")
-#println(base_genome)
+println("Base genome:")
+println(base_genome)
 
-#println("Simulated genomes:")
-#for genome in genomes
-#    println(genome)
-#end
+println("Simulated genomes:")
+for genome in genomes
+    println(genome)
+end
