@@ -40,18 +40,18 @@ end
 # Testing the simulate_genomes function
 
 # Length of the genomes
-n = 10
+#n = 10
 # Inversion rates for the three genomes
-rates = [5, 10, 15]
+#rates = [5, 10, 15]
 # Seed for reproducability
-seed = 12
+#seed = 12
 
-base_genome, genomes = simulate_genomes(n, rates, "simulated_genomes.txt", seed)
+#base_genome, genomes = simulate_genomes(n, rates, "simulated_genomes.txt", seed)
 
-println("Base genome:")
-println(base_genome)
+#println("Base genome:")
+#println(base_genome)
 
-println("Simulated genomes:")
-for genome in genomes
-    println(genome)
-end
+#println("Simulated genomes:")
+#for genome in genomes
+#    println(genome)
+#end
