@@ -6,11 +6,15 @@ function perform_inversion!(genome)
     if i > j
         i, j = j, i
     end
-    # Reverse the segment and negate each element
     genome[i:j] = -reverse(genome[i:j])
 end
 
-function simulate_genomes(n, rates)
+function simulate_genomes(n, rates, output_file, seed=nothing)
+    # Set the seed if provided
+    if seed !== nothing
+        Random.seed!(seed)
+    end
+
     base_genome = collect(1:n)
     genomes = []
 
@@ -20,6 +24,13 @@ function simulate_genomes(n, rates)
             perform_inversion!(genome)
         end
         push!(genomes, genome)
+    end
+
+    # Write to file
+    open(output_file, "w") do file
+        for genome in genomes
+            write(file, join(genome, " "), "\n")
+        end
     end
 
     return base_genome, genomes
@@ -32,8 +43,10 @@ end
 n = 10
 # Inversion rates for the three genomes
 rates = [5, 10, 15]
+# Seed for reproducability
+seed = 12
 
-base_genome, genomes = simulate_genomes(n, rates)
+base_genome, genomes = simulate_genomes(n, rates, "simulated_genomes.txt", seed)
 
 println("Base genome:")
 println(base_genome)
