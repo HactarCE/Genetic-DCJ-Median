@@ -1,0 +1,23 @@
+{
+"apiVersion": "V2",
+"assemblies": [
+{
+  "files": [
+    {
+      "filePath": "data_summary.tsv",
+      "fileType": "DATA_TABLE"
+    },
+    {
+      "filePath": "assembly_data_report.jsonl",
+      "fileType": "DATA_REPORT"
+    }
+  ]
+},{
+  "accession": "GCF_023558535.1",
+  "files": [
+    {
+      "filePath": "GCF_023558535.1/genomic.gff",
+      "fileType": "GFF3"
+    }
+  ]
+}]}

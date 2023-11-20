@@ -1,0 +1,2 @@
+Organism Scientific Name	Organism Common Name	Organism Qualifier	Taxonomy id	Assembly Name	Assembly Accession	Source	Annotation	Level	Contig N50	Size	Submission Date	Gene Count	BioProject	BioSample
+Drosophila miranda		sex: male, strain: MSH22	7229	D.miranda_PacBio2.1	GCF_003369915.1	RefSeq	NCBI Drosophila miranda Annotation Release 102	Chromosome	11978448	287096000	2019-09-23	23864	PRJNA474939	SAMN09375764
