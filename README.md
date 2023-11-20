@@ -2,8 +2,6 @@
 
 Genetic DCJ median genome algorithm & visualization based on <https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0062156>
 
-Additional Required Data: <https://drive.google.com/file/d/14MgC86JFYVfcuUiBLWwKfi8iHSGjqi2h/view?usp=sharing>
-
 ## Input format
 
 - Each genome is one line
