@@ -64,5 +64,3 @@ print_top_group_counts(tables)
 
 # Create signed permutations for each species in each table
 permutations = create_signed_permutations(tables)
-
-println(permutations[1])
