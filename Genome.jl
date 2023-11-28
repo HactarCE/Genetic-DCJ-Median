@@ -1,7 +1,9 @@
 # Function to convert the Adjacency Graph into the Genome
 function Genome(AG::Vector{Vector{Int}})
-    G=Vector{Int}()
+    # AG is the Adjacency Graph
+    G=Vector{Vector{Int}}()
     while(length(AG)>0)
+        chrom=Vector{Int}()
         # start with the first adjacency
         idx=findfirst(elt->0 in elt,AG)
 
@@ -17,13 +19,13 @@ function Genome(AG::Vector{Vector{Int}})
         end
         # if the first adjacency consists of a telomere the gene is linear
         if(start==0)
-            push!(G,start)
+            push!(chrom,start)
         end
         # Delete the adjacency after it has been used
         deleteat!(AG,idx)
         # Loop till the end of the gene
         while(start!=-temp)
-            push!(G,-temp)
+            push!(chrom,-temp)
             # find the next adjacency
             i=findfirst(elt->-temp in elt,AG)
             if isnothing(i)
@@ -36,7 +38,8 @@ function Genome(AG::Vector{Vector{Int}})
             end
             deleteat!(AG,i)
         end
-        push!(G,start)
+        push!(chrom,start)
+        push!(G,chrom)
     end
     return G
 end

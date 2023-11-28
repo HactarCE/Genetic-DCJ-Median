@@ -4,53 +4,40 @@ function ComputePathLength(E1::Vector{Vector{Int}}, E2::Vector{Vector{Int}}, l::
     # E1 and E2 store the edges of the AdjacencyGraph
     # l is the current path length
     # i is the index of the current edge
+    # select is the Genome number 1 or 2
+
     # If select is 1 use the first genome otherwise use the second
-    if select==1
-        # Store the last visited node, to check for a cycle
-        last=E2[i]
-        # Increment the length of the path
-        l=l+1
-        # Delete the used edges
-        deleteat!(E1,i)
-        deleteat!(E2,i)
-        # Find the next edge
-        j=findfirst(elt->last==elt,E2)
-        # If an edge exist recursively call the function with the new edge, otherwise return
-        if(!(j isa Nothing))
-            last,s,l=ComputePathLength(E1,E2,l,j,2)
-        else
-            return last,2,l
-        end
-        return last,s,l
+    E=(select==1) ? E2 : E1
+    # Store the last visited node, to check for a cycle
+    last = E[i]
+    # Increment the length of the path
+    l+=1
+    # Delete the used edges
+    deleteat!(E1,i)
+    deleteat!(E2,i)
+    # Find the next edge
+    j = findfirst(elt -> last == elt, E)
+    # If an edge exist recursively call the function with the new edge, otherwise return
+    if !isnothing(j)
+        last, s, l = ComputePathLength(E1, E2, l, j, 3 - select)
     else
-        # Store the last visited node, to check for a cycle
-        last=E1[i]
-        # Increment the length of the path
-        l=l+1
-        # Delete the used edges
-        deleteat!(E1,i)
-        deleteat!(E2,i)
-        # Find the next edge
-        j=findfirst(elt->last==elt,E1)
-        # If an edge exist recursively call the function with the new edge, otherwise return
-        if(!(j isa Nothing))
-            last,s,l=ComputePathLength(E1,E2,l,j,1)
-        else
-            return last,1,l
-        end
-        return last,s,l
+        return last, 3 - select, l
     end
+    return last, s, l
 end
 
 # Function to compute the DCJ distance between two genomes
-function DCJdistance(G1::Vector{Int}, G2::Vector{Int})
+function DCJdistance(N::Int,G1::Vector{Vector{Int}}, G2::Vector{Vector{Int}})
+    # N is the number of genes
+    # G1 is the first Genome
+    # G2 is the second Genome
+
     # Get the Adjacency Graphs for both the genomes
     AG1=AdjacencyGraph(G1)
     AG2=AdjacencyGraph(G2)
     # Initialize the number of cycles and odd length paths to zero
     C=0
     I=0
-    N=length(G1)
     # Add the edges of the graphs to the edge vectors
     E1=Vector{Vector{Int}}()
     E2=Vector{Vector{Int}}()
@@ -67,14 +54,12 @@ function DCJdistance(G1::Vector{Int}, G2::Vector{Int})
         end
     end
     # First compute the non-cyclic paths
-    # All non-cyc paths will start at an adjacency that has a telomere
+    # All non-cyclic paths will start at an adjacency that has a telomere
     # First start with the adjacencies of genome 1 that have a telomere
-    i=1
-    while(i<=length(E1))
-        # If the current adjacency is not a telomere skip it
-        if(E1[i][1]!=0&&E1[i][2]!=0)
-            i=i+1
-            continue
+    while(length(E1)>0)
+        i=findfirst(elt->0 in elt,E1)
+        if isnothing(i)
+          break
         end
         # Store the first node of the path or cycle
         first=E1[i]
@@ -89,12 +74,10 @@ function DCJdistance(G1::Vector{Int}, G2::Vector{Int})
         end
     end
     # Next use the adjacencies of genome 2 that have a telomere
-    i=1
-    while(i<=length(E2))
-        # If the current adjacency is not a telomere skip it
-        if(E2[i][1]!=0&&E2[i][2]!=0)
-            i=i+1
-            continue
+    while(length(E2)>0)
+        i=findfirst(elt->0 in elt,E2)
+        if isnothing(i)
+          break
         end
         # Store the first node of the path or cycle
         first=E2[i]
@@ -109,11 +92,10 @@ function DCJdistance(G1::Vector{Int}, G2::Vector{Int})
         end
     end
     # Finally use all the remaining adjacencies
-    i=1
     while(length(E1)>0)
         # Store the first node of the path or cycle
-        first=E1[i] 
-        last,s,l=ComputePathLength(E1,E2,0,i,1)
+        first=E1[1]
+        last,s,l=ComputePathLength(E1,E2,0,1,1)
         # Check if there is a cycle present, otherwise check if the length of the path is odd
         if(s==1&&last==first)
             C=C+1
@@ -124,5 +106,5 @@ function DCJdistance(G1::Vector{Int}, G2::Vector{Int})
         end
     end
     # Compute the DCJ distance
-    return N-(C+I/2)
+    return Int(N-(C+div(I,2)))
 end
