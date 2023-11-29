@@ -30,12 +30,11 @@ function print_top_group_counts(tables::Array{DataFrame,1})
     end
 end
 
-# Function to create signed permutations for each species in each table
-function create_signed_permutations(tables::Array{DataFrame,1})
-    permutations = []
+# Function to create a dictionary of signed permutations grouped by species
+function create_permutations(tables::Array{DataFrame,1})
+    species_permutations = Dict()
 
-    for table in tables
-        species_permutations = Dict()
+    for (table_idx, table) in enumerate(tables)
         for col in names(table)
             if occursin("_Gene", col)
                 species = split(col, "_")[1]
@@ -48,13 +47,16 @@ function create_signed_permutations(tables::Array{DataFrame,1})
                 # Determine sign based on strand
                 signed_perm = [table[i, strand_col] == "+" ? j : -j for (i, j) in enumerate(sorted_genes)]
 
-                species_permutations[species] = signed_perm
+                # Update the species_permutations dictionary
+                if !haskey(species_permutations, species)
+                    species_permutations[species] = Dict()
+                end
+                species_permutations[species][table_idx] = signed_perm
             end
         end
-        push!(permutations, species_permutations)
     end
 
-    return permutations
+    return species_permutations
 end
 
 tables = process_csv("ortholog_data_final_sorted.csv")
@@ -63,4 +65,6 @@ tables = process_csv("ortholog_data_final_sorted.csv")
 print_top_group_counts(tables)
 
 # Create signed permutations for each species in each table
-permutations = create_signed_permutations(tables)
+permutations = create_permutations(tables)
+
+println(permutations["Dmelanogaster"][1])
