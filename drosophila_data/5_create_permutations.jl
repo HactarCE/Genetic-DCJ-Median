@@ -31,10 +31,15 @@ function print_top_group_counts(tables::Array{DataFrame,1})
 end
 
 # Function to create a dictionary of signed permutations grouped by species
-function create_permutations(tables::Array{DataFrame,1})
+function create_permutations(tables::Array{DataFrame,1}, min_ortholog_groups::Int=0)
     species_permutations = Dict()
 
     for (table_idx, table) in enumerate(tables)
+        # Skip tables with fewer ortholog groups than the specified threshold
+        if nrow(table) < min_ortholog_groups
+            continue
+        end
+
         for col in names(table)
             if occursin("_Gene", col)
                 species = split(col, "_")[1]
@@ -65,6 +70,6 @@ tables = process_csv("ortholog_data_final_sorted.csv")
 print_top_group_counts(tables)
 
 # Create signed permutations for each species in each table
-permutations = create_permutations(tables)
+permutations = create_permutations(tables, 50)
 
 println(permutations["Dmelanogaster"][1])
