@@ -11,6 +11,7 @@ lookup_df = pd.read_csv(tsv_file_path, sep='\t')
 
 # Preprocess the NCBI TSV file to create a lookup dictionary
 print("Creating lookup dictionary from NCBI TSV file...")
+print("This may take a few minutes...")
 lookup_dict = {}
 for _, row in lookup_df.iterrows():
     species_prefix = row[3][:4]
