@@ -19,14 +19,14 @@ function process_csv(file_path::String)
     return tables
 end
 
-# Function to print ortholog group counts for the top groups
+# Function to print ortholog group counts for the top chromosome fragments
 function print_top_group_counts(tables::Array{DataFrame,1})
     num_tables = length(tables)
     num_to_display = min(num_tables, 50)
 
-    println("Ortholog Group Counts for the Top ", num_to_display, " Groups:")
+    println("Ortholog Group Counts for the Top ", num_to_display, " Chromosome Fragments:")
     for i in 1:num_to_display
-        println("Group ", i, ": ", nrow(tables[i]), " ortholog groups")
+        println("Fragment ", i, ": ", nrow(tables[i]), " ortholog groups")
     end
 end
 
