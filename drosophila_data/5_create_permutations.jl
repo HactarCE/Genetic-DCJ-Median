@@ -57,9 +57,9 @@ function create_permutations(tables::Array{DataFrame,1}, min_ortholog_groups::In
 
                 # Update the species_permutations dictionary
                 if !haskey(species_permutations, species)
-                    species_permutations[species] = Dict()
+                    species_permutations[species] = []
                 end
-                species_permutations[species][table_idx] = signed_perm
+                push!(species_permutations[species], signed_perm)
             end
         end
     end
