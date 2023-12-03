@@ -2,6 +2,10 @@ This supplemental material corresponds to the DCJ Median Genetic Algorithm Media
 
 The python scripts contained in this supplemental material can be used to generate the Drosophila orthology dataset that was used as the real-world data example when testing the algorithm.
 
+The following python packages are required to run these scripts:
+1. Pandas - https://pandas.pydata.org/
+
+Tested on Python v3.11.3
 
 
 Scripts should be run in order of the preceeding number:
