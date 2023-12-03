@@ -67,6 +67,7 @@ function create_permutations(tables::Array{DataFrame,1}, min_ortholog_groups::In
     return species_permutations
 end
 
+# CSV file must be in the same directory as this script
 tables = process_csv("ortholog_data_final_sorted.csv")
 
 # Print ortholog group counts for the top groups
