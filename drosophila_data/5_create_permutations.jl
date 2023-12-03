@@ -7,6 +7,9 @@ function process_csv(file_path::String)
     # Read the CSV file
     df = CSV.read(file_path, DataFrame)
 
+    # Add a unique identifier to each row
+    df[!, :OrthologID] = 1:nrow(df)
+
     # Identify chromosome columns (assuming they contain the word 'Chromosome')
     chromosome_cols = [name for name in names(df) if occursin("Chromosome", String(name))]
 
@@ -49,8 +52,8 @@ function create_permutations(tables::Array{DataFrame,1}, min_ortholog_groups::In
                 # Sort based on start positions
                 sorted_genes = sortperm(table[!, start_col])
 
-                # Determine sign based on strand
-                signed_perm = [table[i, strand_col] == "+" ? j : -j for (i, j) in enumerate(sorted_genes)]
+                # Determine sign based on strand and use unique numbering for genes on each chromosome fragment
+                signed_perm = [table[i, strand_col] == "+" ? table[i, :OrthologID] : -table[i, :OrthologID] for i in sorted_genes]
 
                 # Update the species_permutations dictionary
                 if !haskey(species_permutations, species)
