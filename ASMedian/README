@@ -1,0 +1,165 @@
+************************************************************
+                        Introduction 
+************************************************************
+
+Program: ASMedian-1.0
+Author: Andrew Wei Xu, wei.xu@epfl.ch
+Date: March 23, 2009
+
+Most of part of this work was carried out at University of Ottawa, under the supervision of David Sankoff.
+
+ASMedian is a software package, which solves the median of three problem for genome arrangements. The package can EXACTLY solve the double-cut-and-join (DCJ) median problem, where the DCJ distance between a pair of genome is decided by the number of cycles in their breakpoint graph. Also since the number of cycles captures the essential information of many other genome rearrangement distance measures (reversal distance, HP distance (reversal, translocation, fission and fusion), reversal and transposition distance, block interchange distance), this program can be used to find the optimal or near-optimal solutions to the median problems under above distances. 
+
+Although the DCJ median problem and the reversal median problem have been proved NP-hard and APX-hard due to A. Caprara. Based on the Multiple Breakpoint Graph (MBG) formulation (also due to A. Caprara), we discovered that a certain subgraphs (so-called Adequate Subgraphs, AS in short) of MBGs enable the problems to be decomposed into smaller subproblems with the same optimality maintained. This program iteratively searches Adequate Subgraphs and then decompose the problems. Although the problem is still NP-hard, however our method dramatically reduces the solution space, so that many instances from real biology data can be solved very quickly and exactly. 
+
+The current version only considers genomes containing one or more circular chromosomes. A general extension which allows genomes to contains any number of linear and/or circular chromosomes is now under development. Also fast polynomial running time heuristics seeking for near-optimal solutions are being development too.
+
+
+************************************************************
+                          Setup 
+************************************************************
+
+Written in Java, the package should work on any machine with Java Virtual Machine support.
+
+After download the tar file "ASMedian-1.0.tar", untar it and it's ready to go.
+
+$ tar -xvf ASMedian-1.0.tar
+
+
+************************************************************
+                          Usage 
+************************************************************
+
+Two programs SIMMedian and BIOMeidan are contained, the same median solver but differing in the way that the input genomes are provided. If we have genomes data and want to find their median genomes, use BIOMedian; otherwise, if we do not have genomes data, or want to test the performance of this median solver, then use SIMMedian.
+
+============================================================
+SIMMedian 
+
+/* to generate sets of simulated data, to find their median genomes and to generate statistics reports. */ 
+
+SIMMedian takes a file, which contains one or more sets of parameters. Each set of parameter takes one line, with one of the following two types (the two types can be mixed in one file).
+
+------------------------------------------------------------
+Two types of parameter sets:
+	
+1) The first way provides 3 parameters: 
+	#GENE #EDGE #INSTANCE
+
+	#GENE is the number of gene each genomes contains;
+	#EDGE is the number of reversals applied to the identity genome to generate each leaf genome;
+	#INSTANCE is the number of instances to simulate.
+
+2) The second way needs 5 parameters:	
+	#GENE #EDGE1 #EDGE2 #EDGE3 #INSTANCE
+
+	#GENE is the number of gene each genomes contains;
+	#EDGE1 is the number of reversals applied to the identity genome to generate the first leaf genome;
+	#EDGE2 is the number of reversals applied to the identity genome to generate the second leaf genome;
+	#EDGE3 is the number of reversals applied to the identity genome to generate the third leaf genome;
+	#INSTANCE is the number of instances to simulate.
+
+Assume sets of parameters are written in the file "parameterfile", then you just need to run the following command
+
+$ java SIMMedian parameterfile
+
+------------------------------------------------------------
+The output files:
+
+4 types of output files are generated: ASCII files storing the simulated instances with 3 genomes per file under the directory Genome; statistics over all instances specified by the same parameter set is stored under the directory result; detailed result for each instance is stored the directory result/detail_$parainfo, where $parainfo is a string containing the corresponding set of parameters ; binary files storing all the instances in each set in a binary format, which can only be read by the program under the directory MBG (which is not useful to the users directly).
+
+$parainfo
+
+$parainfo is a string containing the corresponding set of parameters. For the first way to specify parameters, $parainfo=#GENE_sym_#EDGE_#INSTANCE; for the second way to specify parameters, $parainfo=$GENE_asym_#EDGE1_#EDGE2_#EDGE3_#INSTANCE.
+
+$parainfo is used as part of file names or directory names for the output files, in order to distinguish output files for different sets of parameters.
+
+============================================================
+BIOMedian 
+
+/* to read in one or more data files and find their median genomes. */
+
+BIOMedian takes one parameter either as the name of the data file or as the name of the directory under which all files are data files. If "dataname" is such a data file or directory, we just run the command,
+
+$ java BIOMedian dataname
+
+------------------------------------------------------------
+The format of the data structure
+
+An example:
+
+>Genome1
+C: 1 -29 4 17 8 9 -30 -12 3 -16 10 -7 -6 -5 11 -23 -20 -19 -18 -15 -14 -13 25 26 27 28 24 21 22 2 
+>Genome2
+C: 1 2 3 4 6 -10 -11 26 -24 -28 -27 23 9 15 16 -14 8 29 -20 25 17 -18 -13 -12 -30 21 22 -19 5 -7  
+>Genome3
+C: 1 11 -7 -6 -5 -13 -9 -14 3 4 -28 -27 -24 -20 -19 -18 10 -22 -21 23 15 2 -26 30 -12 29 -25 -17 -16 -8  
+
+Rules:
+Each genome should begins with the symbol ">" with the genome name. Each chromosome consists of one line of signed numbers; and the line may begin with "C: " to remind that the chromosome is circular. At current version, each genome should only contain one chromosome.
+
+Any line not containing ">" or numbers is ignored by the programs. So it's OK to put extra lines for the purpose of clarity.
+------------------------------------------------------------
+The output files:
+
+BIOMedian only gives one output for each input data. If input data is a file, BIOMedian writes the output information into an output file whose name consists of the name of input file and the suffix ".rst". If the input is a directory, then BIOMedian output results into an output directory whose name consists of the name of the input directory and the suffix ".rst".
+
+
+************************************************************
+                        Examples 
+************************************************************
+
+1. To simulate 100 instances, where each genome contains 100 genes, and use 30 reversals to generate each leaf genome.
+
+	The file "parameter1" specifies the required set of parameters, which are "100 30 100". We just run the following command:
+
+	$java SIMMedian parameter1
+
+
+2. To simulate 100 instances, where each genome contains 100 genes, and use 20, 30, 40 reversals to generate each leaf genome.
+
+	The file "parameter2" specifies the required set of parameters, which are "100 20 30 40 100". We just run the following command:
+
+	$java SIMMedian parameter2
+
+3. To solve the median problem specified by the file "example"  
+
+	$java BIOMedian example 
+
+4. To solve all median problems specified by the files under the directory "allexamples", where all files under this directory are valid data file.
+
+	$java BIOMedian allexamples
+
+
+
+************************************************************
+                        Reference 
+************************************************************
+
+1. “Decompositions of multiple breakpoint graphs and rapid exact solutions to the median problem.” 
+Andrew Wei Xu and David Sankoff 
+K.A. Crandal l and J. Lagergren (Eds.): Proceedings of the Workshop on Algorithms in Bioinformatics, WABI 2008, Lecture Notes in Bioinformatics 5251, Springer.
+
+2. “A fast and exact algorithm for the median of three problem—a graph decomposition approach.” 
+Andrew Wei Xu 
+C.E. Nelson and S. Vialette (Eds.): Proceedings of RECOMB Comparative Genomics, RECOMB-CG 2008, Lecture Notes in Bioinformatics 526, pp. 182–195, 2008.
+
+
+************************************************************
+                        Other issues 
+************************************************************
+
+1. Since the median problem is still NP-hard, for some instances with very large number of genes plus very huge genomic distance, the programs may take extremely long time to finish. To avoid such unwanted situation, we use a cutoff time, whose default value is 10 minutes. This value can be changed. To do so, open the file ASMedian.java, find the line "static long TIME = 600000;" and change number 600000 (measured in millisecond) to a time period you like.
+
+2. The program maintains all partial solutions (iMBGs) in order to make the program run fast, by avoiding checking some configurations repeatedly or some configurations whose best results are no larger than the optimality. Sometime this leaves a heavy burden to RAM. The program actually store most of these partial solutions into the hard disk. The variable "BLOCK" in the file ASMedian.java controls the number of instances will still stay in the RAM. In case the program uses a large memory, you can decrease this variable to let the program use a smaller amount of RAM. Of course another option is to let the program use a large memory by typing "java -Xmx2000m SIMMedian ...".
+
+3. The initialization step for java programs takes some additional time. In the case of our programs, the additional time is about hundreds of milliseconds. When the average running time is about 50 or 100 milliseconds, it gives serious bias. To avoid the situation, we can run an arbitrary set of instances before we run on the instances of interest. 
+
+************************************************************
+                       Acknowledgment 
+************************************************************
+
+************************************************************
+                        Bugs 
+************************************************************
+
+contact: wei.xu@epfl.ch

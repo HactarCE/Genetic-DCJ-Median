@@ -1,0 +1,13 @@
+>the median genome
+C1: 1 2 3 4 5 6 7 59 60 61 62 63 64 65 66 67 68 19 20 21 22 23 24 25 26 27 -17 -16 -15 -14 -13 -12 -11 -10 -9 -89 -88 -87 -86 -85 -84 -83 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 8 90 91 92 93 94 95 96 97 98 99 100 
+C2: 18 69 70 71 72 73 74 75 76 77 78 79 80 81 82 -40 -39 -38 -37 -36 -35 -34 -33 -32 -31 -30 -29 -28 
+#####################################
+
+maximum cycle number:	        215 	minimum DCJ distance:	         85
+initial lower bounds:	        196 	initial upper bound:	        216
+
+heuristic cycle numbers : 		       215
+differences with the optimal: 		         0
+heuristic running times: 		         0
+
+The DCJ distances between leaf genomes and the median: 	        20         27         38
